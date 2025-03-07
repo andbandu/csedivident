@@ -51,11 +51,7 @@ export class MemStorage implements IStorage {
         dividendAmount: 1.00,
         frequency: "annual",
         yield: 2.50,
-        yearWiseData: [
-          "2023:1.00", "2022:0.75", "2021:0.50", "2020:0.40", "2019:0.60", 
-          "2018:0.55", "2017:0.48", "2016:0.42", "2015:0.38", "2014:0.35", 
-          "2013:0.32", "2012:0.28", "2011:0.25"
-        ]
+        yearWiseData: ["2023:1.00", "2022:0.75", "2021:0.50"]
       },
       {
         companyName: "Commercial Bank PLC",
@@ -67,11 +63,7 @@ export class MemStorage implements IStorage {
         dividendAmount: 6.50,
         frequency: "annual",
         yield: 4.50,
-        yearWiseData: [
-          "2023:6.50", "2022:5.00", "2021:4.50", "2020:4.00", "2019:4.75", 
-          "2018:4.25", "2017:3.90", "2016:3.60", "2015:3.40", "2014:3.20", 
-          "2013:3.00", "2012:2.75", "2011:2.50"
-        ]
+        yearWiseData: ["2023:6.50", "2022:5.00", "2021:4.50"]
       },
       {
         companyName: "DFCC Bank PLC",
@@ -83,43 +75,7 @@ export class MemStorage implements IStorage {
         dividendAmount: 5.00,
         frequency: "annual",
         yield: 3.50,
-        yearWiseData: [
-          "2023:5.00", "2022:3.00", "2021:2.00", "2020:1.80", "2019:2.50", 
-          "2018:2.30", "2017:2.10", "2016:1.90", "2015:1.75", "2014:1.60", 
-          "2013:1.45", "2012:1.30", "2011:1.20"
-        ]
-      },
-      {
-        companyName: "Hatton National Bank PLC",
-        ticker: "HNB",
-        sector: "Banking",
-        established: 1888,
-        quotedDate: 1970,
-        fyEnding: "December",
-        dividendAmount: 8.50,
-        frequency: "annual",
-        yield: 5.20,
-        yearWiseData: [
-          "2023:8.50", "2022:7.75", "2021:7.00", "2020:6.50", "2019:7.25", 
-          "2018:6.90", "2017:6.50", "2016:6.10", "2015:5.80", "2014:5.50", 
-          "2013:5.20", "2012:4.90", "2011:4.60"
-        ]
-      },
-      {
-        companyName: "Ceylon Tobacco Company PLC",
-        ticker: "CTC",
-        sector: "Consumer Goods",
-        established: 1932,
-        quotedDate: 1954,
-        fyEnding: "December",
-        dividendAmount: 105.00,
-        frequency: "quarterly",
-        yield: 6.80,
-        yearWiseData: [
-          "2023:105.00", "2022:98.50", "2021:92.00", "2020:87.50", "2019:94.00", 
-          "2018:90.00", "2017:85.00", "2016:80.00", "2015:76.00", "2014:72.00", 
-          "2013:68.00", "2012:64.00", "2011:60.00"
-        ]
+        yearWiseData: ["2023:5.00", "2022:3.00", "2021:2.00"]
       }
     ];
 
