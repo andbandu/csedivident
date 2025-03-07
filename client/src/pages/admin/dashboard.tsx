@@ -35,9 +35,10 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2, ChevronDown } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export default function AdminDashboard() {
   const { user, logoutMutation } = useAuth();
@@ -306,50 +307,78 @@ export default function AdminDashboard() {
               <TableHead>Established</TableHead>
               <TableHead>Quoted Date</TableHead>
               <TableHead>FY Ending</TableHead>
-              <TableHead>Latest Dividend</TableHead>
               <TableHead>Frequency</TableHead>
-              <TableHead>Historical Data</TableHead>
+              <TableHead>2023</TableHead>
+              <TableHead>2022</TableHead>
+              <TableHead>2021</TableHead>
+              <TableHead>Historical</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dividends?.map((dividend) => (
-              <TableRow key={dividend.id}>
-                <TableCell>{dividend.companyName}</TableCell>
-                <TableCell>{dividend.ticker}</TableCell>
-                <TableCell>{dividend.sector}</TableCell>
-                <TableCell>{dividend.established}</TableCell>
-                <TableCell>{dividend.quotedDate}</TableCell>
-                <TableCell>{dividend.fyEnding}</TableCell>
-                <TableCell>{dividend.dividendAmount}</TableCell>
-                <TableCell className="capitalize">{dividend.frequency}</TableCell>
-                <TableCell>
-                  <div className="text-sm space-y-1">
-                    {dividend.yearWiseData
-                      .sort((a, b) => b.split(":")[0].localeCompare(a.split(":")[0]))
-                      .map((data) => {
-                        const [year, amount] = data.split(":");
-                        return (
-                          <div key={year} className="flex gap-2">
-                            <span className="font-medium">{year}:</span>
-                            <span>{amount}</span>
+            {dividends?.map((dividend) => {
+              const historicalData = dividend.yearWiseData
+                .filter(d => parseInt(d.split(':')[0]) < 2021)
+                .sort((a, b) => b.split(':')[0].localeCompare(a.split(':')[0]));
+
+              return (
+                <TableRow key={dividend.id}>
+                  <TableCell className="font-medium">{dividend.companyName}</TableCell>
+                  <TableCell className="font-medium text-primary">{dividend.ticker}</TableCell>
+                  <TableCell>{dividend.sector}</TableCell>
+                  <TableCell>{dividend.established}</TableCell>
+                  <TableCell>{dividend.quotedDate}</TableCell>
+                  <TableCell>{dividend.fyEnding}</TableCell>
+                  <TableCell className="capitalize">{dividend.frequency}</TableCell>
+                  <TableCell className="font-semibold">
+                    {dividend.yearWiseData.find(d => d.startsWith('2023:'))?.split(':')[1] || '-'}
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    {dividend.yearWiseData.find(d => d.startsWith('2022:'))?.split(':')[1] || '-'}
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    {dividend.yearWiseData.find(d => d.startsWith('2021:'))?.split(':')[1] || '-'}
+                  </TableCell>
+                  <TableCell>
+                    {historicalData.length > 0 && (
+                      <Collapsible>
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="sm" className="w-full">
+                            <ChevronDown className="h-4 w-4" />
+                            <span className="ml-2">{historicalData.length} years of history</span>
+                          </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <div className="mt-2 space-y-1 text-sm">
+                            <div className="grid grid-cols-3 gap-4">
+                              {historicalData.map((data) => {
+                                const [year, amount] = data.split(':');
+                                return (
+                                  <div key={year} className="flex items-center gap-2">
+                                    <span className="font-medium">{year}:</span>
+                                    <span>{amount}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
-                        );
-                    })}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => deleteMutation.mutate(dividend.id)}
-                    disabled={deleteMutation.isPending}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => deleteMutation.mutate(dividend.id)}
+                      disabled={deleteMutation.isPending}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
