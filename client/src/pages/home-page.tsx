@@ -110,7 +110,6 @@ export default function HomePage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Company</TableHead>
-                <TableHead>Ticker</TableHead>
                 <TableHead>Sector</TableHead>
                 <TableHead>Established</TableHead>
                 <TableHead>Quoted Date</TableHead>
@@ -119,7 +118,7 @@ export default function HomePage() {
                 {years.map(year => (
                   <TableHead key={year}>{year}</TableHead>
                 ))}
-                <TableHead>Historical</TableHead>
+                <TableHead>History</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -127,8 +126,7 @@ export default function HomePage() {
                 const historicalData = getHistoricalData(dividend.yearWiseData);
                 return (
                   <TableRow key={dividend.id}>
-                    <TableCell className="font-medium">{dividend.companyName}</TableCell>
-                    <TableCell className="font-medium text-primary">{dividend.ticker}</TableCell>
+                    <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
                     <TableCell>{dividend.sector}</TableCell>
                     <TableCell>{dividend.established}</TableCell>
                     <TableCell>{dividend.quotedDate}</TableCell>
@@ -165,16 +163,12 @@ export default function HomePage() {
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-fade-in w-full">
                             <div className="absolute left-0 mt-2 p-4 bg-card border rounded-lg shadow-lg w-full z-10">
-                              <div className="flex items-center justify-between mb-3">
-                                <span className="font-semibold">{dividend.ticker}</span>
-                                <span className="text-sm text-muted-foreground">Historical Data</span>
-                              </div>
-                              <div className="mt-2 flex flex-wrap gap-4">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                                 {historicalData.map((data) => {
                                   const [year, amount] = data.split(':');
                                   return (
-                                    <div key={year} className="px-3 py-2 bg-muted rounded-md">
-                                      <span className="text-sm font-medium">{year}: </span>
+                                    <div key={year} className="px-3 py-2 bg-muted rounded-md flex flex-col items-center">
+                                      <span className="text-sm font-medium">{year}</span>
                                       <span className="text-sm font-bold">${amount}</span>
                                     </div>
                                   );

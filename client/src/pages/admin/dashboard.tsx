@@ -348,7 +348,6 @@ export default function AdminDashboard() {
           <TableHeader>
             <TableRow>
               <TableHead>Company</TableHead>
-              <TableHead>Ticker</TableHead>
               <TableHead>Sector</TableHead>
               <TableHead>Established</TableHead>
               <TableHead>Quoted Date</TableHead>
@@ -357,7 +356,7 @@ export default function AdminDashboard() {
               <TableHead>2023</TableHead>
               <TableHead>2022</TableHead>
               <TableHead>2021</TableHead>
-              <TableHead>Historical</TableHead>
+              <TableHead>History</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -369,8 +368,7 @@ export default function AdminDashboard() {
 
               return (
                 <TableRow key={dividend.id}>
-                  <TableCell className="font-medium">{dividend.companyName}</TableCell>
-                  <TableCell className="font-medium text-primary">{dividend.ticker}</TableCell>
+                  <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
                   <TableCell>{dividend.sector}</TableCell>
                   <TableCell>{dividend.established}</TableCell>
                   <TableCell>{dividend.quotedDate}</TableCell>
@@ -396,13 +394,13 @@ export default function AdminDashboard() {
                         </CollapsibleTrigger>
                         <CollapsibleContent className="w-full animate-fade-in">
                           <div className="mt-2 text-sm w-full">
-                            <div className="flex flex-wrap gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                               {historicalData.map((data) => {
                                 const [year, amount] = data.split(':');
                                 return (
-                                  <div key={year} className="flex items-center gap-2 p-2 bg-muted rounded-md">
-                                    <span>{year}:</span>
-                                    <span className="font-medium">${amount}</span>
+                                  <div key={year} className="flex flex-col items-center p-2 bg-muted rounded-md">
+                                    <span className="font-medium">{year}</span>
+                                    <span className="font-bold">${amount}</span>
                                   </div>
                                 );
                               })}
