@@ -163,40 +163,41 @@ export default function HomePage() {
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-fade-in">
-                            {/* Expanded row will be rendered here */}
+                            {openHistoricalData[dividend.id] && (
+                    <TableRow className="bg-muted/30">
+                      <TableCell colSpan={6}>
+                        <div className="p-4 bg-card rounded-md">
+                          <h4 className="font-medium mb-2">Dividend History</h4>
+                          <div className="overflow-x-auto">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  {historicalData.map((data) => {
+                                    const [year] = data.split(':');
+                                    return <TableHead key={year}>{year}</TableHead>;
+                                  })}
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                <TableRow>
+                                  {historicalData.map((data) => {
+                                    const [year, amount] = data.split(':');
+                                    return <TableCell key={year}>${amount}</TableCell>;
+                                  })}
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
                           </CollapsibleContent>
                         </Collapsible>
                       )}
                     </TableCell>
                   </TableRow>
-                  {openHistoricalData[dividend.id] && (
-                    <TableRow className="bg-muted/30 border-t-0">
-                      <TableCell colSpan={6 + years.length + 1} className="p-2">
-                        <div className="p-4 bg-card border rounded-md shadow-md">
-                          <h3 className="text-sm font-medium mb-2">Historical Dividend Data</h3>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Year</TableHead>
-                                <TableHead>Amount</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {historicalData.map((data) => {
-                                const [year, amount] = data.split(':');
-                                return (
-                                  <TableRow key={year}>
-                                    <TableCell>{year}</TableCell>
-                                    <TableCell className="font-medium">${amount}</TableCell>
-                                  </TableRow>
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
+                  
                   </>
                 );
               })}

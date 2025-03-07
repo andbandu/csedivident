@@ -73,6 +73,20 @@ tr + tr.bg-muted\/30 {
   transition: all 0.3s ease-in-out;
 }
 
+/* Horizontal data table styling */
+.bg-muted\/30 .bg-card .overflow-x-auto {
+  margin-bottom: 0.5rem;
+}
+
+.bg-muted\/30 .bg-card table th {
+  min-width: 80px;
+  text-align: center;
+}
+
+.bg-muted\/30 .bg-card table td {
+  text-align: center;
+}
+
   to {
     opacity: 1;
     transform: translateX(0);
