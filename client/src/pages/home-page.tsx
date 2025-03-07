@@ -125,6 +125,7 @@ export default function HomePage() {
               {filteredDividends?.map((dividend) => {
                 const historicalData = getHistoricalData(dividend.yearWiseData);
                 return (
+                  <>
                   <TableRow key={dividend.id}>
                     <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
                     <TableCell>{dividend.sector}</TableCell>
@@ -162,24 +163,32 @@ export default function HomePage() {
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-fade-in">
-                            <div className="mt-2 p-4 bg-card border rounded-lg shadow-lg" style={{ maxWidth: "300px" }}>
-                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                {historicalData.map((data) => {
-                                  const [year, amount] = data.split(':');
-                                  return (
-                                    <div key={year} className="px-3 py-2 bg-muted rounded-md flex flex-col items-center">
-                                      <span className="text-sm font-medium">{year}</span>
-                                      <span className="text-sm font-bold">${amount}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
+                            {/* Expanded row will be rendered here */}
                           </CollapsibleContent>
                         </Collapsible>
                       )}
                     </TableCell>
                   </TableRow>
+                  {openHistoricalData[dividend.id] && (
+                    <TableRow className="bg-muted/30 border-t-0">
+                      <TableCell colSpan={6 + years.length + 1} className="p-2">
+                        <div className="p-4 bg-card border rounded-md shadow-md">
+                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
+                            {historicalData.map((data) => {
+                              const [year, amount] = data.split(':');
+                              return (
+                                <div key={year} className="px-3 py-2 bg-muted rounded-md flex flex-col items-center">
+                                  <span className="text-sm font-medium">{year}</span>
+                                  <span className="text-sm font-bold">${amount}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  </>
                 );
               })}
             </TableBody>

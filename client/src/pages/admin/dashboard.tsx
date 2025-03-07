@@ -35,10 +35,9 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2, ChevronDown, Pencil } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
 
 export default function AdminDashboard() {
@@ -356,7 +355,6 @@ export default function AdminDashboard() {
               <TableHead>2023</TableHead>
               <TableHead>2022</TableHead>
               <TableHead>2021</TableHead>
-              <TableHead>History</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -367,212 +365,200 @@ export default function AdminDashboard() {
                 .sort((a, b) => b.split(':')[0].localeCompare(a.split(':')[0]));
 
               return (
-                <TableRow key={dividend.id}>
-                  <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
-                  <TableCell>{dividend.sector}</TableCell>
-                  <TableCell>{dividend.established}</TableCell>
-                  <TableCell>{dividend.quotedDate}</TableCell>
-                  <TableCell>{dividend.fyEnding}</TableCell>
-                  <TableCell className="capitalize">{dividend.frequency}</TableCell>
-                  <TableCell className="font-semibold">
-                    {dividend.yearWiseData.find(d => d.startsWith('2023:'))?.split(':')[1] || '-'}
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                    {dividend.yearWiseData.find(d => d.startsWith('2022:'))?.split(':')[1] || '-'}
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                    {dividend.yearWiseData.find(d => d.startsWith('2021:'))?.split(':')[1] || '-'}
-                  </TableCell>
-                  <TableCell>
-                    {historicalData.length > 0 && (
-                      <Collapsible>
-                        <CollapsibleTrigger asChild>
-                          <Button variant="ghost" size="sm" className="w-full">
-                            <ChevronDown className="h-4 w-4" />
-                            <span className="ml-2">{historicalData.length} years of history</span>
-                          </Button>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="animate-fade-in">
-                          <div className="mt-2 mb-4 p-4 bg-card border rounded-lg shadow-md text-sm" style={{ maxWidth: "300px" }}>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                              {historicalData.map((data) => {
-                                const [year, amount] = data.split(':');
-                                return (
-                                  <div key={year} className="flex flex-col items-center p-2 bg-muted rounded-md">
-                                    <span className="font-medium">{year}</span>
-                                    <span className="font-bold">${amount}</span>
-                                  </div>
-                                );
-                              })}
+                <>
+                  <TableRow key={dividend.id}>
+                    <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
+                    <TableCell>{dividend.sector}</TableCell>
+                    <TableCell>{dividend.established}</TableCell>
+                    <TableCell>{dividend.quotedDate}</TableCell>
+                    <TableCell>{dividend.fyEnding}</TableCell>
+                    <TableCell className="capitalize">{dividend.frequency}</TableCell>
+                    <TableCell className="font-semibold">
+                      {dividend.yearWiseData.find(d => d.startsWith('2023:'))?.split(':')[1] || '-'}
+                    </TableCell>
+                    <TableCell className="font-semibold">
+                      {dividend.yearWiseData.find(d => d.startsWith('2022:'))?.split(':')[1] || '-'}
+                    </TableCell>
+                    <TableCell className="font-semibold">
+                      {dividend.yearWiseData.find(d => d.startsWith('2021:'))?.split(':')[1] || '-'}
+                    </TableCell>
+                    {historicalData.map((data) => {
+                      const [year, amount] = data.split(':');
+                      return (
+                        <TableRow key={year}>
+                          <TableCell colSpan={8} className="pl-12">
+                            <div className="flex flex-row items-center justify-between">
+                              <span className="font-medium">{year}</span>
+                              <span className="font-bold">${amount}</span>
                             </div>
-                          </div>
-                        </CollapsibleContent>
-                      </Collapsible>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => setAddingYearData(dividend.id)}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Add Year Data</DialogTitle>
-                          </DialogHeader>
-                          <Form {...yearDataForm}>
-                            <form
-                              onSubmit={yearDataForm.handleSubmit((data) =>
-                                addYearDataMutation.mutate({
-                                  id: dividend.id,
-                                  year: parseInt(data.year.toString()),
-                                  amount: data.amount
-                                })
-                              )}
-                              className="space-y-4"
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => setAddingYearData(dividend.id)}
                             >
-                              <FormField
-                                control={yearDataForm.control}
-                                name="year"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Year</FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        type="number"
-                                        {...field}
-                                        min={1800}
-                                        max={new Date().getFullYear()}
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Add Year Data</DialogTitle>
+                            </DialogHeader>
+                            <Form {...yearDataForm}>
+                              <form
+                                onSubmit={yearDataForm.handleSubmit((data) =>
+                                  addYearDataMutation.mutate({
+                                    id: dividend.id,
+                                    year: parseInt(data.year.toString()),
+                                    amount: data.amount
+                                  })
                                 )}
-                              />
-                              <FormField
-                                control={yearDataForm.control}
-                                name="amount"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Dividend Amount</FormLabel>
-                                    <FormControl>
-                                      <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <Button
-                                type="submit"
-                                className="w-full"
-                                disabled={addYearDataMutation.isPending}
+                                className="space-y-4"
                               >
-                                {addYearDataMutation.isPending && (
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                )}
-                                Add Year Data
-                              </Button>
-                            </form>
-                          </Form>
-                        </DialogContent>
-                      </Dialog>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => setEditingDividend(dividend)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Edit Company Data</DialogTitle>
-                          </DialogHeader>
-                          <Form {...form} defaultValues={editingDividend}>
-                            <form
-                              onSubmit={form.handleSubmit((data) =>
-                                editMutation.mutate({ id: editingDividend!.id, dividend: data })
-                              )}
-                              className="space-y-4"
+                                <FormField
+                                  control={yearDataForm.control}
+                                  name="year"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>Year</FormLabel>
+                                      <FormControl>
+                                        <Input
+                                          type="number"
+                                          {...field}
+                                          min={1800}
+                                          max={new Date().getFullYear()}
+                                        />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                                <FormField
+                                  control={yearDataForm.control}
+                                  name="amount"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>Dividend Amount</FormLabel>
+                                      <FormControl>
+                                        <Input {...field} />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                                <Button
+                                  type="submit"
+                                  className="w-full"
+                                  disabled={addYearDataMutation.isPending}
+                                >
+                                  {addYearDataMutation.isPending && (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                  )}
+                                  Add Year Data
+                                </Button>
+                              </form>
+                            </Form>
+                          </DialogContent>
+                        </Dialog>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => setEditingDividend(dividend)}
                             >
-                              <div className="grid grid-cols-2 gap-4">
-                                <FormField
-                                  control={form.control}
-                                  name="companyName"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Company Name</FormLabel>
-                                      <FormControl>
-                                        <Input {...field} />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                <FormField
-                                  control={form.control}
-                                  name="ticker"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Ticker</FormLabel>
-                                      <FormControl>
-                                        <Input {...field} />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                {/* ...Rest of the fields for editing */}
-                                <FormField
-                                  control={form.control}
-                                  name="frequency"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Frequency</FormLabel>
-                                      <Select onValueChange={field.onChange} value={field.value}>
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Edit Company Data</DialogTitle>
+                            </DialogHeader>
+                            <Form {...form} defaultValues={editingDividend}>
+                              <form
+                                onSubmit={form.handleSubmit((data) =>
+                                  editMutation.mutate({ id: editingDividend!.id, dividend: data })
+                                )}
+                                className="space-y-4"
+                              >
+                                <div className="grid grid-cols-2 gap-4">
+                                  <FormField
+                                    control={form.control}
+                                    name="companyName"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>Company Name</FormLabel>
                                         <FormControl>
-                                          <SelectTrigger>
-                                            <SelectValue placeholder="Select frequency" />
-                                          </SelectTrigger>
+                                          <Input {...field} />
                                         </FormControl>
-                                        <SelectContent>
-                                          <SelectItem value="monthly">Monthly</SelectItem>
-                                          <SelectItem value="quarterly">Quarterly</SelectItem>
-                                          <SelectItem value="annual">Annual</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                              </div>
-                              <Button type="submit" className="w-full mt-6" disabled={editMutation.isPending}>
-                                {editMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Update Dividend Data
-                              </Button>
-                            </form>
-                          </Form>
-                        </DialogContent>
-                      </Dialog>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => deleteMutation.mutate(dividend.id)}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                  <FormField
+                                    control={form.control}
+                                    name="ticker"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>Ticker</FormLabel>
+                                        <FormControl>
+                                          <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                  {/* ...Rest of the fields for editing */}
+                                  <FormField
+                                    control={form.control}
+                                    name="frequency"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>Frequency</FormLabel>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                          <FormControl>
+                                            <SelectTrigger>
+                                              <SelectValue placeholder="Select frequency" />
+                                            </SelectTrigger>
+                                          </FormControl>
+                                          <SelectContent>
+                                            <SelectItem value="monthly">Monthly</SelectItem>
+                                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                                            <SelectItem value="annual">Annual</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                </div>
+                                <Button type="submit" className="w-full mt-6" disabled={editMutation.isPending}>
+                                  {editMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                  Update Dividend Data
+                                </Button>
+                              </form>
+                            </Form>
+                          </DialogContent>
+                        </Dialog>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => deleteMutation.mutate(dividend.id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </>
               );
             })}
           </TableBody>
