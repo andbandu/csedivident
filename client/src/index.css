@@ -45,11 +45,20 @@
 
 .bg-muted\/30 .bg-card table th {
   font-weight: 600;
-  text-align: left;
+  text-align: center;
+}
+
+.bg-muted\/30 .bg-card table td {
+  text-align: center;
 }
 
 .bg-muted\/30 .bg-card table tbody tr:hover {
   background-color: hsl(var(--muted) / 0.3);
+}
+
+/* Historical data row */
+.bg-muted\/30 {
+  width: 100%;
 }
 
 table {
@@ -66,6 +75,17 @@ table {
 /* Collapsible content styling */
 [data-state="open"] .animate-fade-in {
   display: block;
+  width: 100%;
+}
+
+/* Ensure the historical data row spans full width */
+tr.bg-muted\/30 {
+  width: 100%;
+}
+
+/* Ensure collapsible content appears in the right position */
+[data-state="open"] + tbody tr.bg-muted\/30 {
+  display: table-row;
 }
 
 /* Historical data row styling */

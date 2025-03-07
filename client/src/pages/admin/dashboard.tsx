@@ -408,17 +408,21 @@ export default function AdminDashboard() {
                             </span>
                           </Button>
                         </CollapsibleTrigger>
-                        <CollapsibleContent className="animate-fade-in">
-                          <div className="mt-2 mb-2 p-4 bg-card border rounded-md shadow-md">
-                            <div className="overflow-x-auto"> {/* Added for horizontal scrolling */}
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    {historicalData.map((data) => {
-                                      const [year] = data.split(':');
-                                      return <TableHead key={year}>{year}</TableHead>;
-                                    })}
-                                  </TableRow>
+                        <CollapsibleContent>
+                          {openHistoricalData?.[dividend.id] && (
+                            <TableRow className="bg-muted/30">
+                              <TableCell colSpan={12}>
+                                <div className="p-4 bg-card rounded-md w-full">
+                                  <h4 className="font-medium mb-2">Dividend History</h4>
+                                  <div className="overflow-x-auto">
+                                    <Table>
+                                      <TableHeader>
+                                        <TableRow>
+                                          {historicalData.map((data) => {
+                                            const [year] = data.split(':');
+                                            return <TableHead key={year}>{year}</TableHead>;
+                                          })}
+                                        </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                   <TableRow>
@@ -428,9 +432,12 @@ export default function AdminDashboard() {
                                     })}
                                   </TableRow>
                                 </TableBody>
-                              </Table>
-                            </div>
-                          </div>
+                                    </Table>
+                                  </div>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
                         </CollapsibleContent>
                       </Collapsible>
                     </TableCell>
