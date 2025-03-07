@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { DividendData, insertDividendSchema } from "@shared/schema";
+import { DividendData, insertDividendSchema, InsertDividend } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,16 +57,16 @@ export default function AdminDashboard() {
       quotedDate: 2000,
       fyEnding: "December",
       dividendAmount: "0.00",
-      frequency: "annual",
+      frequency: "annual" as const,
       yield: "0.00",
       yearWiseData: [],
     },
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: InsertDividend) => {
       const res = await apiRequest("POST", "/api/dividends", data);
-      return res.json();
+      return await res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/dividends"] });
@@ -75,6 +75,13 @@ export default function AdminDashboard() {
         description: "Dividend data created successfully",
       });
       form.reset();
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -113,202 +120,187 @@ export default function AdminDashboard() {
         </Button>
       </div>
 
-      <div className="mb-8">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Dividend Data
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Dividend Data</DialogTitle>
-            </DialogHeader>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit((data) => createMutation.mutate(data))}
-                className="space-y-4"
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Dividend Data
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Dividend Data</DialogTitle>
+          </DialogHeader>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit((data) => createMutation.mutate(data))}
+              className="space-y-4"
+            >
+              <FormField
+                control={form.control}
+                name="companyName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Company Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="ticker"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ticker</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="sector"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sector</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="established"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Established Year</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={field.value}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="quotedDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quoted Year</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={field.value}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="fyEnding"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>FY Ending</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select month" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {[
+                          "January", "February", "March", "April",
+                          "May", "June", "July", "August",
+                          "September", "October", "November", "December"
+                        ].map((month) => (
+                          <SelectItem key={month} value={month}>{month}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dividendAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Dividend Amount</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="frequency"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Frequency</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select frequency" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="quarterly">Quarterly</SelectItem>
+                        <SelectItem value="annual">Annual</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="yield"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Yield (%)</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={createMutation.isPending}
               >
-                <FormField
-                  control={form.control}
-                  name="companyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="ticker"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ticker</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="sector"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Sector</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="established"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Established Year</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="number" 
-                          {...field}
-                          value={field.value}
-                          onChange={(e) => field.onChange(parseInt(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="quotedDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quoted Year</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="number" 
-                          {...field}
-                          value={field.value}
-                          onChange={(e) => field.onChange(parseInt(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="fyEnding"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>FY Ending</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select month" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="January">January</SelectItem>
-                          <SelectItem value="February">February</SelectItem>
-                          <SelectItem value="March">March</SelectItem>
-                          <SelectItem value="April">April</SelectItem>
-                          <SelectItem value="May">May</SelectItem>
-                          <SelectItem value="June">June</SelectItem>
-                          <SelectItem value="July">July</SelectItem>
-                          <SelectItem value="August">August</SelectItem>
-                          <SelectItem value="September">September</SelectItem>
-                          <SelectItem value="October">October</SelectItem>
-                          <SelectItem value="November">November</SelectItem>
-                          <SelectItem value="December">December</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="dividendAmount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Dividend Amount</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="frequency"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Frequency</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select frequency" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="monthly">Monthly</SelectItem>
-                          <SelectItem value="quarterly">Quarterly</SelectItem>
-                          <SelectItem value="annual">Annual</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="yield"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Yield (%)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={createMutation.isPending}
-                >
-                  {createMutation.isPending && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Create
-                </Button>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      </div>
+                {createMutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Create
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border mt-8">
         <Table>
           <TableHeader>
             <TableRow>
@@ -321,6 +313,7 @@ export default function AdminDashboard() {
               <TableHead>Dividend Amount</TableHead>
               <TableHead>Frequency</TableHead>
               <TableHead>Yield</TableHead>
+              <TableHead>Year-wise Data</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -333,9 +326,16 @@ export default function AdminDashboard() {
                 <TableCell>{dividend.established}</TableCell>
                 <TableCell>{dividend.quotedDate}</TableCell>
                 <TableCell>{dividend.fyEnding}</TableCell>
-                <TableCell>${dividend.dividendAmount}</TableCell>
+                <TableCell>{dividend.dividendAmount}</TableCell>
                 <TableCell className="capitalize">{dividend.frequency}</TableCell>
                 <TableCell>{dividend.yield}%</TableCell>
+                <TableCell>
+                  <div className="text-sm text-muted-foreground">
+                    {dividend.yearWiseData.map((data) => (
+                      <div key={data}>{data}</div>
+                    ))}
+                  </div>
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="destructive"

@@ -22,7 +22,7 @@ import { Loader2 } from "lucide-react";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
-  const [selectedSector, setSelectedSector] = useState<string>("");
+  const [selectedSector, setSelectedSector] = useState<string>("all");
 
   const { data: dividends, isLoading } = useQuery<DividendData[]>({
     queryKey: ["/api/dividends"],
@@ -34,7 +34,7 @@ export default function HomePage() {
     (dividend) =>
       (dividend.companyName.toLowerCase().includes(search.toLowerCase()) ||
        dividend.ticker.toLowerCase().includes(search.toLowerCase())) &&
-      (!selectedSector || dividend.sector === selectedSector)
+      (selectedSector === "all" || dividend.sector === selectedSector)
   );
 
   if (isLoading) {
@@ -70,7 +70,7 @@ export default function HomePage() {
               <SelectValue placeholder="Select sector" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Sectors</SelectItem>
+              <SelectItem value="all">All Sectors</SelectItem>
               {sectors.map((sector) => (
                 <SelectItem key={sector} value={sector}>
                   {sector}
@@ -106,7 +106,7 @@ export default function HomePage() {
                 <TableCell>{dividend.established}</TableCell>
                 <TableCell>{dividend.quotedDate}</TableCell>
                 <TableCell>{dividend.fyEnding}</TableCell>
-                <TableCell>${dividend.dividendAmount}</TableCell>
+                <TableCell>{dividend.dividendAmount}</TableCell>
                 <TableCell className="capitalize">{dividend.frequency}</TableCell>
                 <TableCell>{dividend.yield}%</TableCell>
                 <TableCell>

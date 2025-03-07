@@ -1,5 +1,4 @@
 import { pgTable, text, serial, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const users = pgTable("users", {
@@ -24,11 +23,13 @@ export const dividendData = pgTable("dividend_data", {
   lastUpdated: timestamp("last_updated").defaultNow().notNull(),
 });
 
+// Validation schemas for user operations
 export const insertUserSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+// Validation schema for dividend data
 export const insertDividendSchema = z.object({
   companyName: z.string().min(1, "Company name is required"),
   ticker: z.string().min(1, "Ticker is required"),
