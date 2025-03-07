@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  //Table,
+  //TableBody,
+  //TableCell,
+  //TableHead,
+  //TableHeader,
+  //TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import {
@@ -105,85 +105,59 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Company</TableHead>
-                <TableHead>Sector</TableHead>
-                <TableHead>Established</TableHead>
-                <TableHead>Quoted Date</TableHead>
-                <TableHead>FY Ending</TableHead>
-                <TableHead>Frequency</TableHead>
-                {years.map(year => (
-                  <TableHead key={year}>{year}</TableHead>
-                ))}
-                <TableHead>History</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredDividends?.map((dividend) => {
-                const historicalData = getHistoricalData(dividend.yearWiseData);
-                return (
-                  <TableRow key={dividend.id}>
-                    <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
-                    <TableCell>{dividend.sector}</TableCell>
-                    <TableCell>{dividend.established}</TableCell>
-                    <TableCell>{dividend.quotedDate}</TableCell>
-                    <TableCell>{dividend.fyEnding}</TableCell>
-                    <TableCell className="capitalize">{dividend.frequency}</TableCell>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"> {/* Grid layout */}
+          {filteredDividends?.map((dividend) => {
+            const historicalData = getHistoricalData(dividend.yearWiseData);
+            return (
+              <Card key={dividend.id} className="border-primary/20">
+                <CardHeader>
+                  <CardTitle>{dividend.companyName} ({dividend.ticker})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 gap-2">
+                    <div><strong>Sector:</strong> {dividend.sector}</div>
+                    <div><strong>Established:</strong> {dividend.established}</div>
+                    <div><strong>Quoted Date:</strong> {dividend.quotedDate}</div>
+                    <div><strong>FY Ending:</strong> {dividend.fyEnding}</div>
+                    <div><strong>Frequency:</strong> {dividend.frequency}</div>
                     {years.map(year => (
-                      <TableCell key={year} className="font-semibold">
-                        {getDividendForYear(dividend.yearWiseData, year)}
-                      </TableCell>
+                      <div key={year}><strong>{year}:</strong> {getDividendForYear(dividend.yearWiseData, year)}</div>
                     ))}
-                    <TableCell>
-                      {historicalData.length > 0 && (
-                        <Collapsible
-                          open={openHistoricalData[dividend.id]}
-                          onOpenChange={(isOpen) =>
-                            setOpenHistoricalData(prev => ({ ...prev, [dividend.id]: isOpen }))
-                          }
-                        >
-                          <CollapsibleTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className={`w-full transition-colors hover:bg-muted ${
-                                openHistoricalData[dividend.id] ? 'bg-muted' : ''
-                              }`}
-                            >
-                              <ChevronLeft className={`h-4 w-4 transition-transform ${
-                                openHistoricalData[dividend.id] ? 'rotate-180' : ''
-                              }`} />
-                              <span className="ml-2">
-                                View {historicalData.length} years
-                              </span>
-                            </Button>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="animate-fade-in">
-                            <div className="mt-2 p-4 bg-card border rounded-lg shadow-lg" style={{ maxWidth: "300px" }}>
-                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                {historicalData.map((data) => {
-                                  const [year, amount] = data.split(':');
-                                  return (
-                                    <div key={year} className="px-3 py-2 bg-muted rounded-md flex flex-col items-center">
-                                      <span className="text-sm font-medium">{year}</span>
-                                      <span className="text-sm font-bold">${amount}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
+                    {historicalData.length > 0 && (
+                      <Collapsible
+                        open={openHistoricalData[dividend.id]}
+                        onOpenChange={(isOpen) =>
+                          setOpenHistoricalData(prev => ({ ...prev, [dividend.id]: isOpen }))
+                        }
+                      >
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="sm" className="w-full">
+                            <ChevronLeft className={`h-4 w-4 transition-transform ${openHistoricalData[dividend.id] ? 'rotate-180' : ''}`} />
+                            View {historicalData.length} years
+                          </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="animate-fade-in">
+                          <div className="mt-2 p-4 bg-card border rounded-lg shadow-lg" style={{ maxWidth: "300px" }}>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                              {historicalData.map((data) => {
+                                const [year, amount] = data.split(':');
+                                return (
+                                  <div key={year} className="px-3 py-2 bg-muted rounded-md flex flex-col items-center">
+                                    <span className="text-sm font-medium">{year}</span>
+                                    <span className="text-sm font-bold">${amount}</span>
+                                  </div>
+                                );
+                              })}
                             </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </div>
