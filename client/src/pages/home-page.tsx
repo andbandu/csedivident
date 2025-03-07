@@ -169,24 +169,26 @@ export default function HomePage() {
                                   <div className="p-4 bg-card rounded-md w-full">
                                     <h4 className="font-medium mb-2">Dividend History</h4>
                                     <div className="overflow-x-auto">
-                                      <Table>
-                                        <TableHeader>
-                                          <TableRow>
-                                            {historicalData.map((data) => {
-                                              const [year] = data.split(':');
-                                              return <TableHead key={year}>{year}</TableHead>;
-                                            })}
-                                          </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                          <TableRow>
-                                            {historicalData.map((data) => {
-                                              const [year, amount] = data.split(':');
-                                              return <TableCell key={year}>${amount}</TableCell>;
-                                            })}
-                                          </TableRow>
-                                        </TableBody>
-                                      </Table>
+                                      <div className="historical-data-table">
+                                        <Table>
+                                          <TableHeader>
+                                            <TableRow>
+                                              {historicalData.map((data) => {
+                                                const [year] = data.split(':');
+                                                return <TableHead key={year}>{year}</TableHead>;
+                                              })}
+                                            </TableRow>
+                                          </TableHeader>
+                                          <TableBody>
+                                            <TableRow>
+                                              {historicalData.map((data) => {
+                                                const [year, amount] = data.split(':');
+                                                return <TableCell key={year}>${amount}</TableCell>;
+                                              })}
+                                            </TableRow>
+                                          </TableBody>
+                                        </Table>
+                                      </div>
                                     </div>
                                   </div>
                                 </TableCell>

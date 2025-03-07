@@ -36,6 +36,16 @@
   overflow: visible;
 }
 
+/* Historical data styling */
+.historical-data-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.historical-data-table table {
+  min-width: 100%;
+}
+
 /* Historical data table styling */
 .bg-muted\/30 .bg-card table {
   width: 100%;
