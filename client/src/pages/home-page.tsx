@@ -71,10 +71,10 @@ export default function HomePage() {
       <div className="container mx-auto py-12">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            Dividend Data Portal
+            CSE Divident History
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Track and analyze dividend payments from various companies across different sectors
+            Track and analyze Sri Lanka Stock dividend payments from various companies across different sectors
           </p>
         </div>
 
@@ -110,6 +110,7 @@ export default function HomePage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Company</TableHead>
+                <TableHead>Ticker</TableHead>
                 <TableHead>Sector</TableHead>
                 <TableHead>Established</TableHead>
                 <TableHead>Quoted Date</TableHead>
@@ -127,7 +128,8 @@ export default function HomePage() {
                 return (
                   <>
                   <TableRow key={dividend.id}>
-                    <TableCell className="font-medium">{dividend.companyName} <span className="text-primary text-xs">({dividend.ticker})</span></TableCell>
+                    <TableCell className="font-medium">{dividend.companyName}</TableCell>
+                    <TableCell>{dividend.ticker}</TableCell>
                     <TableCell>{dividend.sector}</TableCell>
                     <TableCell>{dividend.established}</TableCell>
                     <TableCell>{dividend.quotedDate}</TableCell>
@@ -171,8 +173,8 @@ export default function HomePage() {
                   </TableRow>
                   {openHistoricalData[dividend.id] && (
                     <TableRow className="bg-muted/30 border-t-0">
-                      <TableCell colSpan={6 + years.length + 1} className="p-2">
-                        <div className="p-4 bg-card border rounded-md shadow-md">
+                      <TableCell colSpan={7 + years.length + 1} className="p-2">
+                        <div className="p-4 bg-card">
                           <div className="overflow-x-auto">
                             <table className="w-full">
                               <tbody>
@@ -190,7 +192,7 @@ export default function HomePage() {
                                   {historicalData.map((data) => {
                                     const [year, amount] = data.split(':');
                                     return (
-                                      <td key={year} className="text-center font-medium px-3 py-2">${amount}</td>
+                                      <td key={year} className="text-center font-medium px-3 py-2">Rs. {amount}</td>
                                     );
                                   })}
                                 </tr>
