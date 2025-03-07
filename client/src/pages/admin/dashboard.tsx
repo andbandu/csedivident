@@ -410,26 +410,34 @@ export default function AdminDashboard() {
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-fade-in">
-                            <div className="mt-2 mb-2 p-4 bg-card border rounded-md shadow-md">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead>Year</TableHead>
-                                    <TableHead>Amount</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  {historicalData.map((data) => {
-                                    const [year, amount] = data.split(':');
-                                    return (
-                                      <TableRow key={year}>
-                                        <TableCell>{year}</TableCell>
-                                        <TableCell className="font-medium">${amount}</TableCell>
-                                      </TableRow>
-                                    );
-                                  })}
-                                </TableBody>
-                              </Table>
+                            <div className="w-full p-4 bg-muted/30">
+                              <div className="p-4 bg-card rounded-lg shadow-lg">
+                                <h4 className="text-sm font-semibold mb-2">Dividend History</h4>
+                                <div className="overflow-x-auto historical-table-container">
+                                  <table className="horizontal-history-table">
+                                    <tbody>
+                                      <tr className="year-row">
+                                        <th className="label-cell">Year</th>
+                                        {historicalData.map((data, idx) => {
+                                          const [year] = data.split(':');
+                                          return (
+                                            <td key={idx} className="px-2 py-1 text-center">{year}</td>
+                                          );
+                                        })}
+                                      </tr>
+                                      <tr className="dividend-row">
+                                        <th className="label-cell">Dividend</th>
+                                        {historicalData.map((data, idx) => {
+                                          const [, amount] = data.split(':');
+                                          return (
+                                            <td key={idx} className="px-2 py-1 text-center">${amount}</td>
+                                          );
+                                        })}
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
                             </div>
                           </CollapsibleContent>
                         </Collapsible>

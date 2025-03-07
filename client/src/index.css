@@ -37,19 +37,34 @@
 }
 
 /* Historical data table styling */
-.bg-muted\/30 .bg-card table {
+.historical-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.horizontal-history-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: auto;
 }
 
-.bg-muted\/30 .bg-card table th {
+.horizontal-history-table .year-row td,
+.horizontal-history-table .dividend-row td {
+  text-align: center;
+  padding: 8px 12px;
+  min-width: 80px;
+}
+
+.horizontal-history-table .label-cell {
   font-weight: 600;
   text-align: left;
+  padding: 8px 12px;
+  width: 100px;
 }
 
-.bg-muted\/30 .bg-card table tbody tr:hover {
-  background-color: hsl(var(--muted) / 0.3);
+.horizontal-history-table tr:hover {
+  background-color: hsl(var(--muted) / 0.1);
 }
 
 table {

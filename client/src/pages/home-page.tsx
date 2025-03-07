@@ -163,7 +163,35 @@ export default function HomePage() {
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-fade-in">
-                            {/* Expanded row will be rendered here */}
+                            <div className="w-full p-4 bg-muted/30">
+                              <div className="p-4 bg-card rounded-lg shadow-lg">
+                                <h4 className="text-sm font-semibold mb-2">Dividend History</h4>
+                                <div className="overflow-x-auto historical-table-container">
+                                  <table className="horizontal-history-table">
+                                    <tbody>
+                                      <tr className="year-row">
+                                        <th className="label-cell">Year</th>
+                                        {historicalData.map((data, idx) => {
+                                          const [year] = data.split(':');
+                                          return (
+                                            <td key={idx} className="px-2 py-1 text-center">{year}</td>
+                                          );
+                                        })}
+                                      </tr>
+                                      <tr className="dividend-row">
+                                        <th className="label-cell">Dividend</th>
+                                        {historicalData.map((data, idx) => {
+                                          const [, amount] = data.split(':');
+                                          return (
+                                            <td key={idx} className="px-2 py-1 text-center">${amount}</td>
+                                          );
+                                        })}
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
                           </CollapsibleContent>
                         </Collapsible>
                       )}
