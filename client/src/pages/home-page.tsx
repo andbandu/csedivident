@@ -154,12 +154,12 @@ export default function HomePage() {
                                 openHistoricalData[dividend.id] ? 'bg-muted' : ''
                               }`}
                             >
-                              <span className="mr-2">
+                              <ChevronLeft className={`h-4 w-4 transition-transform ${
+                                openHistoricalData[dividend.id] ? 'rotate-180' : ''
+                              }`} />
+                              <span className="ml-2">
                                 View {historicalData.length} years
                               </span>
-                              <ChevronRight className={`h-4 w-4 transition-transform ${
-                                openHistoricalData[dividend.id] ? 'rotate-[270deg]' : 'rotate-90'
-                              }`} />
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-fade-in">

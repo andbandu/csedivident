@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, ChevronLeft } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -401,12 +401,11 @@ export default function AdminDashboard() {
                                 openHistoricalData?.[dividend.id] ? 'bg-muted' : ''
                               }`}
                             >
-                              <span className="mr-2">
-                                View {historicalData.length} years
-                              </span>
-                              <ChevronRight className={`h-4 w-4 rotate-90 transition-transform ${
-                                openHistoricalData?.[dividend.id] ? 'rotate-[270deg]' : 'rotate-90'
+                              <ChevronLeft className={`h-4 w-4 transition-transform ${
+                                openHistoricalData?.[dividend.id] ? 'rotate-180' : ''
                               }`} />
+                              <span className="ml-2">
+                                View {historicalData.length} years
                               </span>
                             </Button>
                           </CollapsibleTrigger>
