@@ -173,26 +173,30 @@ export default function HomePage() {
                     <TableRow className="bg-muted/30 border-t-0">
                       <TableCell colSpan={6 + years.length + 1} className="p-2">
                         <div className="p-4 bg-card border rounded-md shadow-md">
-                          <h3 className="text-sm font-medium mb-2">Historical Dividend Data</h3>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Year</TableHead>
-                                <TableHead>Amount</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {historicalData.map((data) => {
-                                const [year, amount] = data.split(':');
-                                return (
-                                  <TableRow key={year}>
-                                    <TableCell>{year}</TableCell>
-                                    <TableCell className="font-medium">${amount}</TableCell>
-                                  </TableRow>
-                                );
-                              })}
-                            </TableBody>
-                          </Table>
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <tbody>
+                                <tr>
+                                  <th className="text-left px-3 py-2 w-24">Year</th>
+                                  {historicalData.map((data) => {
+                                    const [year] = data.split(':');
+                                    return (
+                                      <td key={year} className="text-center px-3 py-2">{year}</td>
+                                    );
+                                  })}
+                                </tr>
+                                <tr>
+                                  <th className="text-left px-3 py-2">Dividend</th>
+                                  {historicalData.map((data) => {
+                                    const [year, amount] = data.split(':');
+                                    return (
+                                      <td key={year} className="text-center font-medium px-3 py-2">${amount}</td>
+                                    );
+                                  })}
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       </TableCell>
                     </TableRow>

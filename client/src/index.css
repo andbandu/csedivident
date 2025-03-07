@@ -101,3 +101,26 @@ tr + tr.bg-muted\/30 {
 .collapsible-content {
   position: relative;
 }
+
+/* Table odd rows */
+.bg-muted\/30 table tr:nth-child(odd) {
+  background-color: hsl(var(--muted) / 0.1);
+}
+
+/* Horizontal dividend history table */
+.overflow-x-auto table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.overflow-x-auto table th {
+  font-weight: 600;
+  text-align: left;
+  background-color: hsl(var(--muted) / 0.2);
+}
+
+.overflow-x-auto table th,
+.overflow-x-auto table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid hsl(var(--border) / 0.5);
+}
