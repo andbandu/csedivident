@@ -50,7 +50,6 @@ table {
 /* Collapsible content styling */
 [data-state="open"] .animate-fade-in {
   display: block;
-  width: 100%;
 }
 
   to {

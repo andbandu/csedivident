@@ -161,9 +161,9 @@ export default function HomePage() {
                               </span>
                             </Button>
                           </CollapsibleTrigger>
-                          <CollapsibleContent className="animate-fade-in w-full">
-                            <div className="mt-2 p-4 bg-card border rounded-lg shadow-lg w-full">
-                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                          <CollapsibleContent className="animate-fade-in">
+                            <div className="mt-2 p-4 bg-card border rounded-lg shadow-lg" style={{ maxWidth: "300px" }}>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                 {historicalData.map((data) => {
                                   const [year, amount] = data.split(':');
                                   return (
