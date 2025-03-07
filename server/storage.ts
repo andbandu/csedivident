@@ -105,7 +105,7 @@ export class MemStorage implements IStorage {
       id,
       username: insertUser.username,
       password: insertUser.password,
-      isAdmin: false,
+      isAdmin: true, // Make first user admin for testing
     };
     this.users.set(id, user);
     return user;

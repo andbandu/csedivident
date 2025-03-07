@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 import { z } from "zod";
 
 export const users = pgTable("users", {
@@ -18,7 +18,6 @@ export const dividendData = pgTable("dividend_data", {
   fyEnding: text("fy_ending").notNull(),
   dividendAmount: text("dividend_amount").notNull(),
   frequency: text("frequency").notNull(), // quarterly, monthly, annual
-  yield: text("yield").notNull(),
   yearWiseData: text("year_wise_data").array().notNull(),
   lastUpdated: timestamp("last_updated").defaultNow().notNull(),
 });
@@ -39,7 +38,6 @@ export const insertDividendSchema = z.object({
   fyEnding: z.string().min(1, "FY Ending is required"),
   dividendAmount: z.string().min(1, "Dividend amount is required"),
   frequency: z.enum(["monthly", "quarterly", "annual"]),
-  yield: z.string().min(1, "Yield is required"),
   yearWiseData: z.array(z.string()),
 });
 

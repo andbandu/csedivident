@@ -91,29 +91,39 @@ export default function HomePage() {
               <TableHead>Established</TableHead>
               <TableHead>Quoted Date</TableHead>
               <TableHead>FY Ending</TableHead>
-              <TableHead>Dividend Amount</TableHead>
+              <TableHead>Latest Dividend</TableHead>
               <TableHead>Frequency</TableHead>
-              <TableHead>Yield</TableHead>
-              <TableHead>Year-wise Data</TableHead>
+              <TableHead>Historical Data</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredDividends?.map((dividend) => (
               <TableRow key={dividend.id}>
-                <TableCell>{dividend.companyName}</TableCell>
-                <TableCell>{dividend.ticker}</TableCell>
+                <TableCell className="font-medium">{dividend.companyName}</TableCell>
+                <TableCell className="font-medium text-primary">{dividend.ticker}</TableCell>
                 <TableCell>{dividend.sector}</TableCell>
                 <TableCell>{dividend.established}</TableCell>
                 <TableCell>{dividend.quotedDate}</TableCell>
                 <TableCell>{dividend.fyEnding}</TableCell>
-                <TableCell>{dividend.dividendAmount}</TableCell>
+                <TableCell className="font-semibold">{dividend.dividendAmount}</TableCell>
                 <TableCell className="capitalize">{dividend.frequency}</TableCell>
-                <TableCell>{dividend.yield}%</TableCell>
                 <TableCell>
-                  <div className="text-sm text-muted-foreground">
-                    {dividend.yearWiseData.map((data) => (
-                      <div key={data}>{data}</div>
-                    ))}
+                  <div className="max-h-28 overflow-y-auto rounded border p-2">
+                    <table className="min-w-full">
+                      <tbody>
+                        {dividend.yearWiseData
+                          .sort((a, b) => b.split(":")[0].localeCompare(a.split(":")[0]))
+                          .map((data) => {
+                            const [year, amount] = data.split(":");
+                            return (
+                              <tr key={year} className="border-b last:border-0">
+                                <td className="py-1 pr-4 font-medium">{year}</td>
+                                <td className="py-1">{amount}</td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
                   </div>
                 </TableCell>
               </TableRow>
