@@ -148,22 +148,36 @@ export default function HomePage() {
                           }
                         >
                           <CollapsibleTrigger asChild>
-                            <Button variant="ghost" size="sm" className="w-full">
-                              <ChevronLeft className="h-4 w-4" />
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className={`w-full transition-colors hover:bg-muted ${
+                                openHistoricalData[dividend.id] ? 'bg-muted' : ''
+                              }`}
+                            >
+                              <ChevronLeft className={`h-4 w-4 transition-transform ${
+                                openHistoricalData[dividend.id] ? 'rotate-180' : ''
+                              }`} />
                               <span className="ml-2">
-                                {historicalData.length} years
+                                View {historicalData.length} years
                               </span>
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-slide-left">
-                            <div className="mt-2 border rounded-md p-3 bg-muted/50">
-                              <div className="text-sm font-medium mb-2">{dividend.ticker} Historical Data</div>
-                              <div className="grid gap-2">
+                            <div className="absolute left-0 mt-2 p-4 bg-card border rounded-lg shadow-lg min-w-[200px] z-10">
+                              <div className="flex items-center justify-between mb-3">
+                                <span className="font-semibold">{dividend.ticker}</span>
+                                <span className="text-sm text-muted-foreground">Historical Data</span>
+                              </div>
+                              <div className="space-y-2">
                                 {historicalData.map((data) => {
                                   const [year, amount] = data.split(':');
                                   return (
-                                    <div key={year} className="flex justify-between items-center">
-                                      <span className="text-muted-foreground">{year}</span>
+                                    <div 
+                                      key={year} 
+                                      className="flex justify-between items-center py-1 border-b last:border-0"
+                                    >
+                                      <span className="text-sm text-muted-foreground">{year}</span>
                                       <span className="font-medium">{amount}</span>
                                     </div>
                                   );
