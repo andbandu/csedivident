@@ -154,8 +154,8 @@ export default function HomePage() {
                                 openHistoricalData[dividend.id] ? 'bg-muted' : ''
                               }`}
                             >
-                              <ChevronLeft className={`h-4 w-4 transition-transform ${
-                                openHistoricalData[dividend.id] ? 'rotate-180' : ''
+                              <ChevronRight className={`h-4 w-4 rotate-90 transition-transform ${
+                                openHistoricalData[dividend.id] ? 'rotate-[270deg]' : 'rotate-90'
                               }`} />
                               <span className="ml-2">
                                 View {historicalData.length} years
