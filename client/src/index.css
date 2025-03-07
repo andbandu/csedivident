@@ -36,6 +36,22 @@
   overflow: visible;
 }
 
+/* Historical data table styling */
+.bg-muted\/30 .bg-card table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.bg-muted\/30 .bg-card table th {
+  font-weight: 600;
+  text-align: left;
+}
+
+.bg-muted\/30 .bg-card table tbody tr:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
 table {
   width: 100%;
   table-layout: fixed;

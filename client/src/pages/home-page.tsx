@@ -173,17 +173,26 @@ export default function HomePage() {
                     <TableRow className="bg-muted/30 border-t-0">
                       <TableCell colSpan={6 + years.length + 1} className="p-2">
                         <div className="p-4 bg-card border rounded-md shadow-md">
-                          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-                            {historicalData.map((data) => {
-                              const [year, amount] = data.split(':');
-                              return (
-                                <div key={year} className="px-3 py-2 bg-muted rounded-md flex flex-col items-center">
-                                  <span className="text-sm font-medium">{year}</span>
-                                  <span className="text-sm font-bold">${amount}</span>
-                                </div>
-                              );
-                            })}
-                          </div>
+                          <h3 className="text-sm font-medium mb-2">Historical Dividend Data</h3>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Year</TableHead>
+                                <TableHead>Amount</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {historicalData.map((data) => {
+                                const [year, amount] = data.split(':');
+                                return (
+                                  <TableRow key={year}>
+                                    <TableCell>{year}</TableCell>
+                                    <TableCell className="font-medium">${amount}</TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
                         </div>
                       </TableCell>
                     </TableRow>

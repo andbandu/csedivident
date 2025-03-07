@@ -35,10 +35,11 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2, Pencil } from "lucide-react";
+import { Loader2, Plus, Trash2, Pencil, ChevronLeft } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@radix-ui/react-collapsible';
 
 export default function AdminDashboard() {
   const { user, logoutMutation } = useAuth();
@@ -147,6 +148,7 @@ export default function AdminDashboard() {
     },
   });
 
+  const [openHistoricalData, setOpenHistoricalData] = useState<{ [key: number]: boolean }>({});
 
   if (isLoading) {
     return (
@@ -355,13 +357,14 @@ export default function AdminDashboard() {
               <TableHead>2023</TableHead>
               <TableHead>2022</TableHead>
               <TableHead>2021</TableHead>
+              <TableHead>Historical Data</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {dividends?.map((dividend) => {
               const historicalData = dividend.yearWiseData
-                .filter(d => parseInt(d.split(':')[0]) < 2021)
+                .filter(d => parseInt(d.split(':')[0]) < 2024)
                 .sort((a, b) => b.split(':')[0].localeCompare(a.split(':')[0]));
 
               return (
@@ -382,19 +385,56 @@ export default function AdminDashboard() {
                     <TableCell className="font-semibold">
                       {dividend.yearWiseData.find(d => d.startsWith('2021:'))?.split(':')[1] || '-'}
                     </TableCell>
-                    {historicalData.map((data) => {
-                      const [year, amount] = data.split(':');
-                      return (
-                        <TableRow key={year}>
-                          <TableCell colSpan={8} className="pl-12">
-                            <div className="flex flex-row items-center justify-between">
-                              <span className="font-medium">{year}</span>
-                              <span className="font-bold">${amount}</span>
+                    <TableCell>
+                      {historicalData.length > 0 && (
+                        <Collapsible
+                          open={openHistoricalData?.[dividend.id] || false}
+                          onOpenChange={(isOpen) =>
+                            setOpenHistoricalData(prev => ({ ...prev, [dividend.id]: isOpen }))
+                          }
+                        >
+                          <CollapsibleTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className={`transition-colors hover:bg-muted ${
+                                openHistoricalData?.[dividend.id] ? 'bg-muted' : ''
+                              }`}
+                            >
+                              <ChevronLeft className={`h-4 w-4 transition-transform ${
+                                openHistoricalData?.[dividend.id] ? 'rotate-180' : ''
+                              }`} />
+                              <span className="ml-2">
+                                View {historicalData.length} years
+                              </span>
+                            </Button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="animate-fade-in">
+                            <div className="mt-2 mb-2 p-4 bg-card border rounded-md shadow-md">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Year</TableHead>
+                                    <TableHead>Amount</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {historicalData.map((data) => {
+                                    const [year, amount] = data.split(':');
+                                    return (
+                                      <TableRow key={year}>
+                                        <TableCell>{year}</TableCell>
+                                        <TableCell className="font-medium">${amount}</TableCell>
+                                      </TableRow>
+                                    );
+                                  })}
+                                </TableBody>
+                              </Table>
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Dialog>
