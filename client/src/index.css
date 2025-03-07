@@ -34,6 +34,8 @@
 /* Table styling */
 .rounded-md.border {
   overflow: visible;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Historical data table styling */
@@ -46,10 +48,12 @@
 .bg-muted\/30 .bg-card table th {
   font-weight: 600;
   text-align: left;
+  color: hsl(var(--muted-foreground));
+  padding: 12px 16px;
 }
 
 .bg-muted\/30 .bg-card table tbody tr:hover {
-  background-color: hsl(var(--muted) / 0.3);
+  background-color: hsl(var(--muted) / 0.2);
 }
 
 table {
@@ -104,7 +108,7 @@ tr + tr.bg-muted\/30 {
 
 /* Table odd rows */
 .bg-muted\/30 table tr:nth-child(odd) {
-  background-color: hsl(var(--muted) / 0.1);
+  background-color: hsl(var(--muted) / 0.05);
 }
 
 /* Horizontal dividend history table */
@@ -116,11 +120,13 @@ tr + tr.bg-muted\/30 {
 .overflow-x-auto table th {
   font-weight: 600;
   text-align: left;
-  background-color: hsl(var(--muted) / 0.2);
+  background-color: hsl(var(--background));
+  color: hsl(var(--muted-foreground));
 }
 
 .overflow-x-auto table th,
 .overflow-x-auto table td {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid hsl(var(--border) / 0.5);
+  padding: 0.75rem 1rem;
+  border: none;
+  border-bottom: 1px solid hsl(var(--border) / 0.2);
 }
