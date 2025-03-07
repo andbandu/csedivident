@@ -44,6 +44,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(dividend);
   });
 
+  // Add year-wise dividend data
+  app.post("/api/dividends/:id/year", requireAdmin, async (req, res) => {
+    const id = parseInt(req.params.id);
+    const { year, amount } = req.body;
+
+    const dividend = await storage.getDividend(id);
+    if (!dividend) {
+      return res.status(404).json({ message: "Dividend not found" });
+    }
+
+    const yearData = `${year}:${amount}`;
+    const updatedYearWiseData = [...dividend.yearWiseData.filter(d => !d.startsWith(`${year}:`)), yearData];
+
+    const updated = await storage.updateDividend(id, {
+      yearWiseData: updatedYearWiseData
+    });
+    res.json(updated);
+  });
+
   app.delete("/api/dividends/:id", requireAdmin, async (req, res) => {
     const id = parseInt(req.params.id);
     await storage.deleteDividend(id);
