@@ -163,22 +163,19 @@ export default function HomePage() {
                               </span>
                             </Button>
                           </CollapsibleTrigger>
-                          <CollapsibleContent className="animate-slide-left w-full">
+                          <CollapsibleContent className="animate-fade-in w-full">
                             <div className="absolute left-0 mt-2 p-4 bg-card border rounded-lg shadow-lg w-full z-10">
                               <div className="flex items-center justify-between mb-3">
                                 <span className="font-semibold">{dividend.ticker}</span>
                                 <span className="text-sm text-muted-foreground">Historical Data</span>
                               </div>
-                              <div className="space-y-2">
+                              <div className="mt-2 flex flex-wrap gap-4">
                                 {historicalData.map((data) => {
                                   const [year, amount] = data.split(':');
                                   return (
-                                    <div 
-                                      key={year} 
-                                      className="flex justify-between items-center py-1 border-b last:border-0"
-                                    >
-                                      <span className="text-sm text-muted-foreground">{year}</span>
-                                      <span className="font-medium">{amount}</span>
+                                    <div key={year} className="px-3 py-2 bg-muted rounded-md">
+                                      <span className="text-sm font-medium">{year}: </span>
+                                      <span className="text-sm font-bold">${amount}</span>
                                     </div>
                                   );
                                 })}

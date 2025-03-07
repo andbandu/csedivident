@@ -394,15 +394,15 @@ export default function AdminDashboard() {
                             <span className="ml-2">{historicalData.length} years of history</span>
                           </Button>
                         </CollapsibleTrigger>
-                        <CollapsibleContent className="w-full">
-                          <div className="mt-2 space-y-1 text-sm w-full">
-                            <div className="grid grid-cols-3 gap-4">
+                        <CollapsibleContent className="w-full animate-fade-in">
+                          <div className="mt-2 text-sm w-full">
+                            <div className="flex flex-wrap gap-3">
                               {historicalData.map((data) => {
                                 const [year, amount] = data.split(':');
                                 return (
-                                  <div key={year} className="flex items-center gap-2">
-                                    <span className="font-medium">{year}:</span>
-                                    <span>{amount}</span>
+                                  <div key={year} className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                                    <span>{year}:</span>
+                                    <span className="font-medium">${amount}</span>
                                   </div>
                                 );
                               })}
