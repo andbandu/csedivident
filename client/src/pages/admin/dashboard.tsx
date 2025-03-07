@@ -394,8 +394,8 @@ export default function AdminDashboard() {
                             <span className="ml-2">{historicalData.length} years of history</span>
                           </Button>
                         </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <div className="mt-2 space-y-1 text-sm">
+                        <CollapsibleContent className="w-full">
+                          <div className="mt-2 space-y-1 text-sm w-full">
                             <div className="grid grid-cols-3 gap-4">
                               {historicalData.map((data) => {
                                 const [year, amount] = data.split(':');

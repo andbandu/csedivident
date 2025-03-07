@@ -163,8 +163,8 @@ export default function HomePage() {
                               </span>
                             </Button>
                           </CollapsibleTrigger>
-                          <CollapsibleContent className="animate-slide-left">
-                            <div className="absolute left-0 mt-2 p-4 bg-card border rounded-lg shadow-lg min-w-[200px] z-10">
+                          <CollapsibleContent className="animate-slide-left w-full">
+                            <div className="absolute left-0 mt-2 p-4 bg-card border rounded-lg shadow-lg w-full z-10">
                               <div className="flex items-center justify-between mb-3">
                                 <span className="font-semibold">{dividend.ticker}</span>
                                 <span className="text-sm text-muted-foreground">Historical Data</span>
