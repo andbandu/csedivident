@@ -35,7 +35,6 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -53,11 +52,14 @@ export default function AdminDashboard() {
     defaultValues: {
       companyName: "",
       ticker: "",
-      dividendAmount: 0,
-      exDate: "",
-      paymentDate: "",
-      frequency: "quarterly",
-      yield: 0,
+      sector: "",
+      established: 2000,
+      quotedDate: 2000,
+      fyEnding: "December",
+      dividendAmount: "0.00",
+      frequency: "annual",
+      yield: "0.00",
+      yearWiseData: [],
     },
   });
 
@@ -156,6 +158,86 @@ export default function AdminDashboard() {
                 />
                 <FormField
                   control={form.control}
+                  name="sector"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sector</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="established"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Established Year</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="number" 
+                          {...field}
+                          value={field.value}
+                          onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="quotedDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Quoted Year</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="number" 
+                          {...field}
+                          value={field.value}
+                          onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="fyEnding"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>FY Ending</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select month" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="January">January</SelectItem>
+                          <SelectItem value="February">February</SelectItem>
+                          <SelectItem value="March">March</SelectItem>
+                          <SelectItem value="April">April</SelectItem>
+                          <SelectItem value="May">May</SelectItem>
+                          <SelectItem value="June">June</SelectItem>
+                          <SelectItem value="July">July</SelectItem>
+                          <SelectItem value="August">August</SelectItem>
+                          <SelectItem value="September">September</SelectItem>
+                          <SelectItem value="October">October</SelectItem>
+                          <SelectItem value="November">November</SelectItem>
+                          <SelectItem value="December">December</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="dividendAmount"
                   render={({ field }) => (
                     <FormItem>
@@ -165,9 +247,6 @@ export default function AdminDashboard() {
                           type="number"
                           step="0.01"
                           {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -180,10 +259,7 @@ export default function AdminDashboard() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Frequency</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select frequency" />
@@ -210,9 +286,6 @@ export default function AdminDashboard() {
                           type="number"
                           step="0.01"
                           {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -241,9 +314,11 @@ export default function AdminDashboard() {
             <TableRow>
               <TableHead>Company</TableHead>
               <TableHead>Ticker</TableHead>
+              <TableHead>Sector</TableHead>
+              <TableHead>Established</TableHead>
+              <TableHead>Quoted Date</TableHead>
+              <TableHead>FY Ending</TableHead>
               <TableHead>Dividend Amount</TableHead>
-              <TableHead>Ex-Date</TableHead>
-              <TableHead>Payment Date</TableHead>
               <TableHead>Frequency</TableHead>
               <TableHead>Yield</TableHead>
               <TableHead>Actions</TableHead>
@@ -254,13 +329,13 @@ export default function AdminDashboard() {
               <TableRow key={dividend.id}>
                 <TableCell>{dividend.companyName}</TableCell>
                 <TableCell>{dividend.ticker}</TableCell>
-                <TableCell>${Number(dividend.dividendAmount).toFixed(2)}</TableCell>
-                <TableCell>{format(new Date(dividend.exDate), "PP")}</TableCell>
-                <TableCell>
-                  {format(new Date(dividend.paymentDate), "PP")}
-                </TableCell>
+                <TableCell>{dividend.sector}</TableCell>
+                <TableCell>{dividend.established}</TableCell>
+                <TableCell>{dividend.quotedDate}</TableCell>
+                <TableCell>{dividend.fyEnding}</TableCell>
+                <TableCell>${dividend.dividendAmount}</TableCell>
                 <TableCell className="capitalize">{dividend.frequency}</TableCell>
-                <TableCell>{Number(dividend.yield).toFixed(2)}%</TableCell>
+                <TableCell>{dividend.yield}%</TableCell>
                 <TableCell>
                   <Button
                     variant="destructive"

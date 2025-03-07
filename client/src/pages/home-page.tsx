@@ -8,23 +8,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import { DividendData } from "@shared/schema";
-import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
+  const [selectedSector, setSelectedSector] = useState<string>("");
 
   const { data: dividends, isLoading } = useQuery<DividendData[]>({
     queryKey: ["/api/dividends"],
   });
 
+  const sectors = Array.from(new Set(dividends?.map(d => d.sector) || []));
+
   const filteredDividends = dividends?.filter(
     (dividend) =>
-      dividend.companyName.toLowerCase().includes(search.toLowerCase()) ||
-      dividend.ticker.toLowerCase().includes(search.toLowerCase())
+      (dividend.companyName.toLowerCase().includes(search.toLowerCase()) ||
+       dividend.ticker.toLowerCase().includes(search.toLowerCase())) &&
+      (!selectedSector || dividend.sector === selectedSector)
   );
 
   if (isLoading) {
@@ -48,13 +58,26 @@ export default function HomePage() {
         <CardHeader>
           <CardTitle>Search Companies</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex gap-4">
           <Input
             placeholder="Search by company name or ticker..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="max-w-sm"
           />
+          <Select value={selectedSector} onValueChange={setSelectedSector}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select sector" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Sectors</SelectItem>
+              {sectors.map((sector) => (
+                <SelectItem key={sector} value={sector}>
+                  {sector}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </CardContent>
       </Card>
 
@@ -64,11 +87,14 @@ export default function HomePage() {
             <TableRow>
               <TableHead>Company</TableHead>
               <TableHead>Ticker</TableHead>
+              <TableHead>Sector</TableHead>
+              <TableHead>Established</TableHead>
+              <TableHead>Quoted Date</TableHead>
+              <TableHead>FY Ending</TableHead>
               <TableHead>Dividend Amount</TableHead>
-              <TableHead>Ex-Date</TableHead>
-              <TableHead>Payment Date</TableHead>
               <TableHead>Frequency</TableHead>
               <TableHead>Yield</TableHead>
+              <TableHead>Year-wise Data</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -76,13 +102,20 @@ export default function HomePage() {
               <TableRow key={dividend.id}>
                 <TableCell>{dividend.companyName}</TableCell>
                 <TableCell>{dividend.ticker}</TableCell>
-                <TableCell>${Number(dividend.dividendAmount).toFixed(2)}</TableCell>
-                <TableCell>{format(new Date(dividend.exDate), "PP")}</TableCell>
-                <TableCell>
-                  {format(new Date(dividend.paymentDate), "PP")}
-                </TableCell>
+                <TableCell>{dividend.sector}</TableCell>
+                <TableCell>{dividend.established}</TableCell>
+                <TableCell>{dividend.quotedDate}</TableCell>
+                <TableCell>{dividend.fyEnding}</TableCell>
+                <TableCell>${dividend.dividendAmount}</TableCell>
                 <TableCell className="capitalize">{dividend.frequency}</TableCell>
-                <TableCell>{Number(dividend.yield).toFixed(2)}%</TableCell>
+                <TableCell>{dividend.yield}%</TableCell>
+                <TableCell>
+                  <div className="text-sm text-muted-foreground">
+                    {dividend.yearWiseData.map((data) => (
+                      <div key={data}>{data}</div>
+                    ))}
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

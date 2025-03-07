@@ -33,6 +33,60 @@ export class MemStorage implements IStorage {
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000,
     });
+
+    // Add dummy data
+    this.addDummyData();
+  }
+
+  private addDummyData() {
+    // Add sample data from the Excel sheet
+    const dummyDividends: InsertDividend[] = [
+      {
+        companyName: "Sampath Bank PLC",
+        ticker: "SAMP",
+        sector: "Banking",
+        established: 1987,
+        quotedDate: 1987,
+        fyEnding: "December",
+        dividendAmount: 1.00,
+        frequency: "annual",
+        yield: 2.50,
+        yearWiseData: ["2023:1.00", "2022:0.75", "2021:0.50"]
+      },
+      {
+        companyName: "Commercial Bank PLC",
+        ticker: "COMB",
+        sector: "Banking",
+        established: 1969,
+        quotedDate: 1970,
+        fyEnding: "December",
+        dividendAmount: 6.50,
+        frequency: "annual",
+        yield: 4.50,
+        yearWiseData: ["2023:6.50", "2022:5.00", "2021:4.50"]
+      },
+      {
+        companyName: "DFCC Bank PLC",
+        ticker: "DFCC",
+        sector: "Banking",
+        established: 1955,
+        quotedDate: 1956,
+        fyEnding: "December",
+        dividendAmount: 5.00,
+        frequency: "annual",
+        yield: 3.50,
+        yearWiseData: ["2023:5.00", "2022:3.00", "2021:2.00"]
+      }
+    ];
+
+    dummyDividends.forEach(dividend => {
+      const id = this.currentDividendId++;
+      this.dividends.set(id, {
+        ...dividend,
+        id,
+        lastUpdated: new Date()
+      });
+    });
   }
 
   async getUser(id: number): Promise<User | undefined> {

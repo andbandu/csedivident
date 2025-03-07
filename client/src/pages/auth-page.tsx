@@ -160,9 +160,8 @@ export default function AuthPage() {
             Welcome to Dividend Data Admin
           </h1>
           <p className="text-muted-foreground">
-            Manage and update dividend information for various companies. Import
-            data from Google Sheets, make manual updates, and keep your dividend
-            data up to date.
+            Manage and update dividend information for various companies. Keep track of historical dividend data,
+            perform updates, and monitor dividend trends across different sectors.
           </p>
         </div>
       </div>

@@ -13,22 +13,33 @@ export const dividendData = pgTable("dividend_data", {
   id: serial("id").primaryKey(),
   companyName: text("company_name").notNull(),
   ticker: text("ticker").notNull(),
-  dividendAmount: decimal("dividend_amount", { precision: 10, scale: 2 }).notNull(),
-  exDate: timestamp("ex_date").notNull(),
-  paymentDate: timestamp("payment_date").notNull(),
+  sector: text("sector").notNull(),
+  established: integer("established").notNull(),
+  quotedDate: integer("quoted_date").notNull(),
+  fyEnding: text("fy_ending").notNull(),
+  dividendAmount: text("dividend_amount").notNull(),
   frequency: text("frequency").notNull(), // quarterly, monthly, annual
-  yield: decimal("yield", { precision: 5, scale: 2 }).notNull(),
+  yield: text("yield").notNull(),
+  yearWiseData: text("year_wise_data").array().notNull(),
   lastUpdated: timestamp("last_updated").defaultNow().notNull(),
 });
 
-export const insertUserSchema = createInsertSchema(users, {
-  username: (schema) => schema.username,
-  password: (schema) => schema.password,
+export const insertUserSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export const insertDividendSchema = createInsertSchema(dividendData).omit({
-  id: true,
-  lastUpdated: true,
+export const insertDividendSchema = z.object({
+  companyName: z.string().min(1, "Company name is required"),
+  ticker: z.string().min(1, "Ticker is required"),
+  sector: z.string().min(1, "Sector is required"),
+  established: z.number().int().min(1800, "Invalid year"),
+  quotedDate: z.number().int().min(1800, "Invalid year"),
+  fyEnding: z.string().min(1, "FY Ending is required"),
+  dividendAmount: z.string().min(1, "Dividend amount is required"),
+  frequency: z.enum(["monthly", "quarterly", "annual"]),
+  yield: z.string().min(1, "Yield is required"),
+  yearWiseData: z.array(z.string()),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
