@@ -31,7 +31,7 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Remove table scrollbars */
+/* Table styling */
 .rounded-md.border {
   overflow: visible;
 }
@@ -45,6 +45,12 @@ table {
 .container table {
   max-width: 100%;
   overflow-x: visible;
+}
+
+/* Collapsible content styling */
+[data-state="open"] .animate-fade-in {
+  display: block;
+  width: 100%;
 }
 
   to {
