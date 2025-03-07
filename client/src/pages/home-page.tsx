@@ -146,6 +146,7 @@ export default function HomePage() {
                           onOpenChange={(isOpen) =>
                             setOpenHistoricalData(prev => ({ ...prev, [dividend.id]: isOpen }))
                           }
+                          className="relative"
                         >
                           <CollapsibleTrigger asChild>
                             <Button variant="ghost" size="sm" className="w-full">
@@ -156,18 +157,20 @@ export default function HomePage() {
                             </Button>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="animate-slide-left">
-                            <div className="mt-2 border rounded-md p-3 bg-muted/50">
-                              <div className="text-sm font-medium mb-2">{dividend.ticker} Historical Data</div>
-                              <div className="grid gap-2">
-                                {historicalData.map((data) => {
-                                  const [year, amount] = data.split(':');
-                                  return (
-                                    <div key={year} className="flex justify-between items-center">
-                                      <span className="text-muted-foreground">{year}</span>
-                                      <span className="font-medium">{amount}</span>
-                                    </div>
-                                  );
-                                })}
+                            <div className="absolute left-0 right-0 z-10 mt-2">
+                              <div className="mx-4 grid grid-cols-1 border rounded-md p-3 bg-muted/50 shadow-lg" style={{ gridColumnStart: 2, gridColumnEnd: 9 }}>
+                                <div className="text-sm font-medium mb-2">{dividend.ticker} Historical Data</div>
+                                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                                  {historicalData.map((data) => {
+                                    const [year, amount] = data.split(':');
+                                    return (
+                                      <div key={year} className="flex justify-between items-center">
+                                        <span className="text-muted-foreground">{year}</span>
+                                        <span className="font-medium">{amount}</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
                               </div>
                             </div>
                           </CollapsibleContent>
