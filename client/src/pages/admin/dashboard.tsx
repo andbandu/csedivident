@@ -401,11 +401,12 @@ export default function AdminDashboard() {
                                 openHistoricalData?.[dividend.id] ? 'bg-muted' : ''
                               }`}
                             >
+                              <span className="mr-2">
+                                View {historicalData.length} years
+                              </span>
                               <ChevronRight className={`h-4 w-4 rotate-90 transition-transform ${
                                 openHistoricalData?.[dividend.id] ? 'rotate-[270deg]' : 'rotate-90'
                               }`} />
-                              <span className="ml-2">
-                                View {historicalData.length} years
                               </span>
                             </Button>
                           </CollapsibleTrigger>
